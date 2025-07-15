@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Action: My Contacts -->
+        <record id="action_my_contacts" model="ir.actions.act_window">
+            <field name="name">My Contacts</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('user_id', '=', uid)]</field>
+        </record>
+
+        <!-- Menu: My Contacts under Contacts -->
+        <menuitem id="menu_my_contacts"
+                  name="My Contacts"
+                  parent="contacts.menu_contacts"
+                  action="action_my_contacts"
+                  sequence="5"
+                  groups="base.group_user"/>
+
+        <!-- Hide default Contacts > Contacts menu -->
+        <record id="contacts.res_partner_menu_contacts" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('sales_team.group_sale_manager')])]"/>
+        </record>
+
+
+
+    </data>
+</odoo>

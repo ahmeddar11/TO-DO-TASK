@@ -1,0 +1,37 @@
+<odoo>
+
+    <record id="rule_todo_task_user" model="ir.rule">
+        <field name="name">User rule</field>
+        <field name="model_id" ref="model_todo_task"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        <field name="domain_force">[('assign_to_id', '=', user.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+
+    <record id="group_allow_confirm_order" model="res.groups">
+        <field name="name">Allow Confirm Order</field>
+    </record>
+
+    <record id="group_set_min_max_price" model="res.groups">
+        <field name="name">Set Min - Max Price in Product</field>
+    </record>
+
+    <record id="group_approve_first" model="res.groups">
+        <field name="name">First Approval</field>
+    </record>
+
+    <record id="group_approve_second" model="res.groups">
+        <field name="name">Second Approval</field>
+    </record>
+
+    <record id="group_approve_final" model="res.groups">
+        <field name="name">Final Approval</field>
+
+    </record>
+
+
+</odoo>

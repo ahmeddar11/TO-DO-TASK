@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_todo_task,todo.task,model_todo_task,,1,1,1,1
+access_approval_detail,approval.detail,model_approval_detail,,1,1,1,1
+access_partner_certification,partner.certification,model_partner_certification,,1,1,1,1
+access_partner_registration,partner_registration,model_partner_registration,,1,1,1,1

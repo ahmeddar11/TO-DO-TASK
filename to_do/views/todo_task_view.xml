@@ -1,0 +1,281 @@
+<odoo>
+
+    <!-- ========== ToDo Task Views ========== -->
+
+    <!-- Tree View -->
+    <record id="todo_task_view_tree" model="ir.ui.view">
+        <field name="name">todo.task.tree</field>
+        <field name="model">todo.task</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="due_date"/>
+                <field name="assign_to_id"/>
+                <field name="state"/>
+                <field name="partner_id" options="{'no_create': True}"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="todo_task_view_form" model="ir.ui.view">
+        <field name="name">todo.task.form</field>
+        <field name="model">todo.task</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="new,in_progress,completed"/>
+                    </header>
+
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+
+
+                    <group>
+                        <group>
+                            <field name="due_date"/>
+                            <field name="assign_to_id"/>
+                        </group>
+                        <field name="description"/>
+                    </group>
+                    <notebook>
+                        <page string="Partner Certifications">
+                            <field name="certification_ids" nolabel="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="validation_from"/>
+                                    <field name="validation_to"/>
+                                    <field name="attachment"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+
+                    <footer>
+                        <button name="action_new" type="object" string="Mark as New" class="btn-secondary"/>
+                        <button name="action_in_progress" type="object" string="Start Task" class="btn-primary"/>
+                        <button name="action_completed" type="object" string="Complete Task" class="btn-success"/>
+                    </footer>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Search View -->
+    <record id="todo_task_view_search" model="ir.ui.view">
+        <field name="name">todo.task.search</field>
+        <field name="model">todo.task</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="assign_to_id"/>
+                <filter name="state_new" string="New" domain="[('state','=','new')]"/>
+                <filter name="group_state" string="Status" context="{'group_by':'state'}"/>
+                <filter name="group_date" string="Due Date" context="{'group_by':'due_date'}"/>
+                <filter name="group_assign" string="Assigned To" context="{'group_by':'assign_to_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Product Template: Add Min/Max Price -->
+    <record id="product_template_form_inherit_min_max_price" model="ir.ui.view">
+        <field name="name">product.template.form.min.max.price</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="min_price"/>
+                <field name="max_price"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Sale Order Line: Show Min/Max & Decoration -->
+    <record id="view_order_form_inherit_min_max_price" model="ir.ui.view">
+        <field name="name">sale.order.form.min.max.price</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
+                <field name="min_price"/>
+                <field name="max_price"/>
+                <field name="is_price_exceed_limit" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree" position="attributes">
+                <attribute name="decoration-danger">is_price_exceed_limit</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Sale Order: Approval Buttons + Stage -->
+    <record id="sale_order_form_inherit_approval" model="ir.ui.view">
+        <field name="name">sale.order.form.approval</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_first_approve" type="object"
+                        string="First Approve"
+                        class="btn btn-primary"
+                        groups="to_do.group_approve_first"/>
+                <button name="action_second_approve" type="object"
+                        string="Second Approve"
+                        class="btn btn-secondary"
+                        groups="to_do.group_approve_second"/>
+                <button name="action_final_approve" type="object"
+                        string="Final Approve"
+                        class="btn btn-success"
+                        groups="to_do.group_approve_final"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <group>
+                    <field name="approval_stage" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Approval Detail Views -->
+    <record id="view_approval_detail_tree" model="ir.ui.view">
+        <field name="name">approval.detail.tree</field>
+        <field name="model">approval.detail</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="level"/>
+                <field name="approve_by"/>
+                <field name="user_id"/>
+                <field name="group_id"/>
+                <field name="min_amount"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_approval_detail_form" model="ir.ui.view">
+        <field name="name">approval.detail.form</field>
+        <field name="model">approval.detail</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="sale_order_id"/>
+                        <field name="level"/>
+                        <field name="approve_by"/>
+                        <field name="user_id"/>
+                        <field name="group_id"/>
+                        <field name="min_amount"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--////////////////////////////////////////////////////////-->
+    <record id="view_partner_form_inherit_certifications_kanban" model="ir.ui.view">
+        <field name="name">res.partner.form.certifications.kanban</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Certifications">
+                    <field name="certification_ids" context="{'default_partner_id': active_id}">
+                        <kanban>
+                            <field name="name"/>
+                            <field name="validation_from"/>
+                            <field name="validation_to"/>
+                            <field name="attachment"/>
+                            <templates>
+                                <t t-name="kanban-box">
+                                    <div class="o_kanban_record">
+                                        <div class="o_kanban_card_content">
+                                            <div>
+                                                <strong>
+                                                    <field name="name"/>
+                                                </strong>
+                                            </div>
+                                            <div>
+                                                <strong>Valid From:</strong>
+                                                <span>
+                                                    <field name="validation_from"/>
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <strong>Valid To:</strong>
+                                                <span>
+                                                    <field name="validation_to"/>
+                                                </span>
+                                            </div>
+                                            <t t-if="record.attachment.raw_value">
+                                                <div>
+                                                    <a t-att-href="'/web/content/partner.certification/' + record.id + '/attachment'"
+                                                       target="_blank">
+                                                        📎 View Attachment
+                                                    </a>
+                                                </div>
+                                            </t>
+                                            <t t-else="">
+                                                <div>
+                                                    <i>No Attachment</i>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </t>
+                            </templates>
+                        </kanban>
+
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="view_move_form_inherit_delivery_button" model="ir.ui.view">
+        <field name="name">account.move.form.delivery.button</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+             <xpath expr="//div[@class='oe_button_box']" position="inside">
+                <button name="action_view_delivery_orders"
+                        string="Delivery"
+                        type="object"
+                        class="btn btn-secondary"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!--/////////////////////////////////////////////////////////////////-->
+    <!-- Actions -->
+    <record id="action_approval_detail" model="ir.actions.act_window">
+        <field name="name">Approval Details</field>
+        <field name="res_model">approval.detail</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="todo_task_action" model="ir.actions.act_window">
+        <field name="name">ToDo Tasks</field>
+        <field name="res_model">todo.task</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menus -->
+    <menuitem id="todo_menu" name="ToDo" sequence="5"/>
+    <menuitem id="all_task_item" name="All Tasks" parent="todo_menu" action="todo_task_action"/>
+    <menuitem id="menu_approval_root" name="Approvals" sequence="10"/>
+    <menuitem id="menu_approval_detail" name="Approval Details" parent="menu_approval_root"
+              action="action_approval_detail"/>
+
+</odoo>

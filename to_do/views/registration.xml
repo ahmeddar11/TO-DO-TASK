@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Action -->
+    <record id="action_partner_certification" model="ir.actions.act_window">
+        <field name="name">Partner Certifications</field>
+        <field name="res_model">partner.certification</field>
+        <field name="view_mode">kanban,form,tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add certifications related to partners
+            </p>
+        </field>
+    </record>
+
+    <!-- Root Menu -->
+    <menuitem id="menu_certification_root" name="Certifications" sequence="50"/>
+
+    <!-- Sub Menu with Action -->
+    <menuitem id="menu_partner_certification_root"
+              name="Partner Certifications"
+              parent="menu_certification_root"
+              action="action_partner_certification"/>
+
+    <!-- Kanban View -->
+   <record id="view_partner_certification_kanban" model="ir.ui.view">
+    <field name="name">partner.certification.kanban</field>
+    <field name="model">partner.certification</field>
+    <field name="arch" type="xml">
+        <kanban>
+            <field name="name"/>
+            <field name="partner_id"/>
+            <field name="validation_from"/>
+            <field name="validation_to"/>
+            <field name="attachment"/>
+
+            <templates>
+                <t t-name="kanban-box">
+                    <div class="o_kanban_record">
+                        <div>
+                            <strong><field name="name"/></strong>
+                        </div>
+                        <div class="o_kanban_card_content">
+                            <div><strong>Partner:</strong> <field name="partner_id"/></div>
+                            <div><strong>Valid From:</strong> <field name="validation_from"/></div>
+                            <div><strong>Valid To:</strong> <field name="validation_to"/></div>
+                            <t t-if="record.attachment.raw_value">
+                                <div>
+                                    <a t-att-href="'/web/content/partner.certification/' + record.id.raw_value + '/attachment'" target="_blank">
+                                        📎 View Attachment
+                                    </a>
+                                </div>
+                            </t>
+                            <t t-if="!record.attachment.raw_value">
+                                <div><i>No Attachment</i></div>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+
+    <!-- Form View -->
+    <record id="view_partner_certification_form" model="ir.ui.view">
+        <field name="name">partner.certification.form</field>
+        <field name="model">partner.certification</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="partner_id"/>
+                        <field name="validation_from"/>
+                        <field name="validation_to"/>
+                        <field name="attachment" filename="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_partner_certification_tree" model="ir.ui.view">
+        <field name="name">partner.certification.tree</field>
+        <field name="model">partner.certification</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="validation_from"/>
+                <field name="validation_to"/>
+            </tree>
+        </field>
+    </record>
+
+    <menuitem id="menu_certification_root" name="Certifications" sequence="50"/>
+
+    <!-- Action -->
+    <record id="action_partner_certification" model="ir.actions.act_window">
+        <field name="name">Partner Certifications</field>
+        <field name="res_model">partner.certification</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_partner_certification_root"
+              name="Partner Certifications"
+              parent="menu_certification_root"
+              action="action_partner_certification"/>
+</odoo>
+
+

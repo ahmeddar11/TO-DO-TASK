@@ -1,0 +1,10 @@
+<odoo>
+  <report
+      id="sale_order_excel_report_action"
+      model="sale.order.excel.wizard"
+      string="Sale Orders Excel"
+      report_type="xlsx"
+      name="your_module.sale_order_excel_report"
+      file="sale_orders"
+      print_report_name="'SaleOrders-%s' % (object.date_from or 'Report')"/>
+</odoo>
