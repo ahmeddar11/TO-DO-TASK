@@ -1,6 +1,6 @@
 {
     'name': "To-Do App",
-    'author': "dar",
+    'author': "ahmed dar",
     'license': 'LGPL-3',
     'category': '',
     'version': '17.0.0.1.0',
